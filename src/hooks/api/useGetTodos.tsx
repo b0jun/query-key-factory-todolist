@@ -1,8 +1,9 @@
-import { QueryFunctionContext, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import api from 'src/api';
-import { filtersType } from 'src/components/TodoList';
 import { todoKeys } from 'src/lib/queryKeyFactory';
 
+import type { filtersType } from 'src/components/TodoList';
+import type { QueryFunctionContext } from '@tanstack/react-query';
 export interface IGetTodosData {
   id: number;
   value: string;

@@ -1,13 +1,14 @@
+import React, { useState } from 'react';
+import cn from 'classnames';
+
 import TodoItem from './TodoItem';
 import styles from './todoList.module.css';
-import React, { useState } from 'react';
 import TodoDetail from './TodoDetail';
 import useDone from 'src/hooks/api/useDone';
 import useUnDone from 'src/hooks/api/useUnDone';
 import useAddTodo from 'src/hooks/api/useAddTodo';
 import useRemoveTodo from 'src/hooks/api/useRemoveTodo';
 import useGetTodos from 'src/hooks/api/useGetTodos';
-import cn from 'classnames';
 
 export type filtersType = 'all' | 'done' | 'undone';
 
