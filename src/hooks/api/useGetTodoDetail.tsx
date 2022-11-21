@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import api from 'src/api';
+import { todoKeys } from 'src/lib/queryKeyFactory';
 
 export interface IGetTodoDetailData {
   id: number;
@@ -14,6 +15,6 @@ const getTodoDetail = async ({ queryKey }: any) => {
 };
 
 const useGetTodoDetail = (id: number) => {
-  return useQuery([{ scope: 'todos', entity: 'detail', id }], getTodoDetail);
+  return useQuery(todoKeys.detail(id), getTodoDetail);
 };
 export default useGetTodoDetail;

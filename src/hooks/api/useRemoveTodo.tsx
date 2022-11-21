@@ -10,7 +10,6 @@ interface IRequestBody {
 }
 
 const removeTodo = async (body: ITodoId) => {
-  console.log(body);
   return api.delete<null, IRequestBody>('/todos', { data: { id: body.id } });
 };
 

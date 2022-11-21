@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from 'src/api';
-import { IGetTodosData } from './useGetTodos';
+import { todoKeys } from 'src/lib/queryKeyFactory';
+import type { filtersType } from 'src/components/TodoList';
+import type { IGetTodosData } from './useGetTodos';
 
 export interface IAddTodoData {
   id: number;
@@ -14,25 +16,25 @@ const addTodo = async (body: IRequestBody) => {
   return api.post<IAddTodoData, IRequestBody>('/todos', body).then((response) => response.data);
 };
 
-const useAddTodo = () => {
+const useAddTodo = (filters: filtersType) => {
   const queryClient = useQueryClient();
 
   return useMutation(addTodo, {
     onSuccess: ({ id }, data) => {
-      queryClient.invalidateQueries([{ scope: 'todos', entity: 'list' }]);
-      // const previousTodos = queryClient.getQueryData<IGetTodosData[]>([
-      //   { scope: 'todos', entity: 'list', filters: 'all' },
-      // ]);
-      // console.log(previousTodos);
-      // if (previousTodos) {
-      //   const tempTodo = {
-      //     id,
-      //     value: data.value,
-      //     date: String(new Date().getTime()),
-      //     isDone: false,
-      //   };
-      //   queryClient.setQueryData([{ scope: 'todos', entity: 'list' }], [...previousTodos, tempTodo]);
-      // }
+      if (filters === 'done') {
+        queryClient.invalidateQueries([{ scope: 'todos', entity: 'list' }]);
+        return;
+      }
+      const previousTodos = queryClient.getQueryData<IGetTodosData[]>(todoKeys.list(filters));
+      if (previousTodos) {
+        const tempTodo = {
+          id,
+          value: data.value,
+          date: String(new Date().getTime()),
+          isDone: false,
+        };
+        queryClient.setQueryData(todoKeys.list(filters), [...previousTodos, tempTodo]);
+      }
     },
   });
 };

@@ -28,10 +28,10 @@ const TodoList = () => {
   };
 
   const { data: todoList, isLoading } = useGetTodos(filters);
-  const { mutate: addTodo } = useAddTodo();
+  const { mutate: addTodo } = useAddTodo(filters);
   const { mutate: removeTodo } = useRemoveTodo();
-  const { mutate: done } = useDone();
-  const { mutate: unDone } = useUnDone();
+  const { mutate: done } = useDone(filters);
+  const { mutate: unDone } = useUnDone(filters);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

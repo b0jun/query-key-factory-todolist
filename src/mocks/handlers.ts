@@ -15,7 +15,6 @@ export const handlers = [
   // 할일 목록 조회
   rest.get('/todos/list', (req, res, ctx) => {
     const filters = req.url.searchParams.get('filters');
-    console.log(filters);
     if (filters) {
       if (filters === 'done') {
         return res(ctx.status(200), ctx.json(todos.filter(({ isDone }) => isDone)));
