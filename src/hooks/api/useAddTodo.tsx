@@ -19,16 +19,20 @@ const useAddTodo = () => {
 
   return useMutation(addTodo, {
     onSuccess: ({ id }, data) => {
-      const previousTodos = queryClient.getQueryData<IGetTodosData[]>([{ scope: 'todos' }]);
-      if (previousTodos) {
-        const tempTodo = {
-          id,
-          value: data.value,
-          date: String(new Date().getTime()),
-          isDone: false,
-        };
-        queryClient.setQueryData([{ scope: 'todos' }], [...previousTodos, tempTodo]);
-      }
+      queryClient.invalidateQueries([{ scope: 'todos', entity: 'list' }]);
+      // const previousTodos = queryClient.getQueryData<IGetTodosData[]>([
+      //   { scope: 'todos', entity: 'list', filters: 'all' },
+      // ]);
+      // console.log(previousTodos);
+      // if (previousTodos) {
+      //   const tempTodo = {
+      //     id,
+      //     value: data.value,
+      //     date: String(new Date().getTime()),
+      //     isDone: false,
+      //   };
+      //   queryClient.setQueryData([{ scope: 'todos', entity: 'list' }], [...previousTodos, tempTodo]);
+      // }
     },
   });
 };

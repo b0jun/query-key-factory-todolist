@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import useGetTodoDetail from 'src/hooks/api/useGetTodoDetail';
 import styles from './todoDetail.module.css';
 
 interface IProps {
@@ -6,12 +6,7 @@ interface IProps {
   closeDetail: () => void;
 }
 const TodoDetail = ({ detailId, closeDetail }: IProps) => {
-  const getTodoDetail = async () =>
-    fetch(`/todos/${detailId}`)
-      .then((res) => res.json())
-      .then((data) => data);
-
-  const { data, isLoading } = useQuery(['todos', 'detail'], getTodoDetail);
+  const { data, isLoading } = useGetTodoDetail(detailId);
 
   if (!data && !isLoading) {
     closeDetail();

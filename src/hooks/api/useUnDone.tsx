@@ -18,11 +18,14 @@ const useUnDone = () => {
 
   return useMutation(todoUnDone, {
     onSuccess: (_, data) => {
-      const previousTodos = queryClient.getQueryData<IGetTodosData[]>(['todos']);
+      const previousTodos = queryClient.getQueryData<IGetTodosData[]>([
+        { scope: 'todos', entity: 'list', filters: 'all' },
+      ]);
+      console.log(previousTodos);
       if (previousTodos) {
         const foundIndex = previousTodos.findIndex(({ id }: ITodoId) => id === data.id);
         previousTodos[foundIndex].isDone = false;
-        queryClient.setQueryData([{ scope: 'todos' }], previousTodos);
+        queryClient.setQueryData([{ scope: 'todos', entity: 'list', filters: 'all' }], previousTodos);
       }
     },
   });

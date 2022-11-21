@@ -1,17 +1,21 @@
 import TodoItem from './TodoItem';
 import styles from './todoList.module.css';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import TodoDetail from './TodoDetail';
 import useDone from 'src/hooks/api/useDone';
 import useUnDone from 'src/hooks/api/useUnDone';
 import useAddTodo from 'src/hooks/api/useAddTodo';
 import useRemoveTodo from 'src/hooks/api/useRemoveTodo';
 import useGetTodos from 'src/hooks/api/useGetTodos';
+import cn from 'classnames';
+
+export type filtersType = 'all' | 'done' | 'undone';
 
 const TodoList = () => {
   const [todo, setTodo] = useState('');
 
   const [detailId, setDetailId] = useState<number | null>(null);
+  const [filters, setFilters] = useState<filtersType>('all');
   const openDetail = (id: number) => {
     setDetailId(id);
   };
@@ -23,7 +27,7 @@ const TodoList = () => {
     setTodo(event.target.value);
   };
 
-  const { data: todoList, isLoading } = useGetTodos();
+  const { data: todoList, isLoading } = useGetTodos(filters);
   const { mutate: addTodo } = useAddTodo();
   const { mutate: removeTodo } = useRemoveTodo();
   const { mutate: done } = useDone();
@@ -33,6 +37,11 @@ const TodoList = () => {
     event.preventDefault();
     addTodo({ value: todo });
     setTodo('');
+  };
+
+  const filterTodos = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const eventTarget = event.target as HTMLButtonElement;
+    setFilters(eventTarget.value as filtersType);
   };
 
   if (!todoList || isLoading) {
@@ -56,6 +65,33 @@ const TodoList = () => {
           +
         </button>
       </form>
+      <div className={styles.filters}>
+        <h3 className={styles.filtersTitle}>필터</h3>
+        <button
+          value="all"
+          className={cn(styles.filtersButton, { [styles.filterChecked]: filters === 'all' })}
+          type="button"
+          onClick={filterTodos}
+        >
+          전체
+        </button>
+        <button
+          value="done"
+          className={cn(styles.filtersButton, { [styles.filterChecked]: filters === 'done' })}
+          type="button"
+          onClick={filterTodos}
+        >
+          완료
+        </button>
+        <button
+          value="undone"
+          className={cn(styles.filtersButton, { [styles.filterChecked]: filters === 'undone' })}
+          type="button"
+          onClick={filterTodos}
+        >
+          미완료
+        </button>
+      </div>
       <ul className={styles.list}>
         {todoList.map(({ id, value, isDone }) => (
           <TodoItem

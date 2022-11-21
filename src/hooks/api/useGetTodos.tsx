@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import api from 'src/api';
+import { filtersType } from 'src/components/TodoList';
 
 export interface IGetTodosData {
   id: number;
@@ -8,11 +9,15 @@ export interface IGetTodosData {
   isDone: boolean;
 }
 
-const getTodos = async () => {
-  return api.get<IGetTodosData[]>('/todos').then((response) => response.data);
+interface IQueryParam {
+  filters: string;
+}
+const getTodos = async ({ queryKey }: any) => {
+  const [{ filters }] = queryKey;
+  return api.get<IGetTodosData[], IQueryParam>('/todos/list', { filters }).then((response) => response.data);
 };
 
-const useGetTodos = () => {
-  return useQuery([{ scope: 'todos' }], getTodos);
+const useGetTodos = (filters: filtersType) => {
+  return useQuery([{ scope: 'todos', entity: 'list', filters }], getTodos);
 };
 export default useGetTodos;

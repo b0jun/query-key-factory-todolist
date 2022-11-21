@@ -10,6 +10,7 @@ interface IRequestBody {
 }
 
 const removeTodo = async (body: ITodoId) => {
+  console.log(body);
   return api.delete<null, IRequestBody>('/todos', { data: { id: body.id } });
 };
 
@@ -18,10 +19,12 @@ const useRemoveTodo = () => {
 
   return useMutation(removeTodo, {
     onSuccess: async (_, data) => {
-      const previousTodos = queryClient.getQueryData<IGetTodosData[]>([{ scope: 'todos' }]);
+      const previousTodos = queryClient.getQueryData<IGetTodosData[]>([
+        { scope: 'todos', entity: 'list', filters: 'all' },
+      ]);
       if (previousTodos && Array.isArray(previousTodos)) {
         const filteredTodos = previousTodos.filter(({ id }: ITodoId) => id !== data.id);
-        queryClient.setQueryData([{ scope: 'todos' }], filteredTodos);
+        queryClient.setQueryData([{ scope: 'todos', entity: 'list', filters: 'all' }], filteredTodos);
       }
     },
   });

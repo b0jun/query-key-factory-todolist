@@ -15,11 +15,14 @@ const useDone = () => {
 
   return useMutation(todoDone, {
     onSuccess: (_, data) => {
-      const previousTodos = queryClient.getQueryData<IGetTodosData[]>([{ scope: 'todos' }]);
+      const previousTodos = queryClient.getQueryData<IGetTodosData[]>([
+        { scope: 'todos', entity: 'list', filters: 'all' },
+      ]);
       if (previousTodos) {
         const foundIndex = previousTodos.findIndex(({ id }: IRequestBody) => id === data.id);
         previousTodos[foundIndex].isDone = true;
-        queryClient.setQueryData([{ scope: 'todos' }], previousTodos);
+        console.log(previousTodos);
+        queryClient.setQueryData([{ scope: 'todos', entity: 'list', filters: 'all' }], previousTodos);
       }
     },
   });
