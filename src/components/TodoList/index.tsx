@@ -29,7 +29,7 @@ const TodoList = () => {
 
   const { data: todoList, isLoading } = useGetTodos(filters);
   const { mutate: addTodo } = useAddTodo(filters);
-  const { mutate: removeTodo } = useRemoveTodo();
+  const { mutate: removeTodo } = useRemoveTodo(filters);
   const { mutate: done } = useDone(filters);
   const { mutate: unDone } = useUnDone(filters);
 
