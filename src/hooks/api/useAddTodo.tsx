@@ -23,7 +23,7 @@ const useAddTodo = (filters: filtersType) => {
   return useMutation(addTodo, {
     onSuccess: ({ id }, data) => {
       if (filters === 'done') {
-        queryClient.invalidateQueries([{ scope: 'todos', entity: 'list' }]);
+        queryClient.invalidateQueries(todoKeys.lists());
         return;
       }
       const previousTodos = queryClient.getQueryData<IGetTodosData[]>(todoKeys.list(filters));
