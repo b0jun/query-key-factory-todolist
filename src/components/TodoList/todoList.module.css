@@ -83,3 +83,10 @@
 .filterChecked {
   font-weight: 800;
 }
+
+.spinnerWrapper {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}

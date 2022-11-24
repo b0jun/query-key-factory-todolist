@@ -9,6 +9,7 @@ import useUnDone from 'src/hooks/api/useUnDone';
 import useAddTodo from 'src/hooks/api/useAddTodo';
 import useRemoveTodo from 'src/hooks/api/useRemoveTodo';
 import useGetTodos from 'src/hooks/api/useGetTodos';
+import Spinner from '../Spinner';
 
 export type filtersType = 'all' | 'done' | 'undone';
 
@@ -45,9 +46,7 @@ const TodoList = () => {
     setFilters(eventTarget.value as filtersType);
   };
 
-  if (!todoList || isLoading) {
-    return <div>로딩</div>;
-  }
+  const isShowSpinner = !todoList || isLoading;
 
   return (
     <div className={styles.container}>
@@ -94,18 +93,24 @@ const TodoList = () => {
         </button>
       </div>
       <ul className={styles.list}>
-        {todoList.map(({ id, value, isDone }) => (
-          <TodoItem
-            key={id}
-            id={id}
-            value={value}
-            isDone={isDone}
-            openDetail={openDetail}
-            done={done}
-            unDone={unDone}
-            removeTodo={removeTodo}
-          />
-        ))}
+        {isShowSpinner ? (
+          <div className={styles.spinnerWrapper}>
+            <Spinner />
+          </div>
+        ) : (
+          todoList.map(({ id, value, isDone }) => (
+            <TodoItem
+              key={id}
+              id={id}
+              value={value}
+              isDone={isDone}
+              openDetail={openDetail}
+              done={done}
+              unDone={unDone}
+              removeTodo={removeTodo}
+            />
+          ))
+        )}
       </ul>
       {detailId && <TodoDetail detailId={detailId} closeDetail={closeDetail} />}
     </div>
